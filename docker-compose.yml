@@ -1,0 +1,15 @@
+services:
+  app:
+    image: jyhyun1008/record-a-record:latest
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3002:3000"
+    env_file:
+      - .env.production
+    environment:
+      DATABASE_URL: file:/data/prod.db
+    volumes:
+      - record-a-record-data:/data
+
+volumes:
+  record-a-record-data:

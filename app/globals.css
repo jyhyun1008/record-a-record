@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@font-face {
+    font-family: 'Soonbatang';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_eight@1.0/SunBatang-Light.woff') format('woff');
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Soonbatang';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_eight@1.0/SunBatang-Medium.woff') format('woff');
+    font-weight: 500;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Soonbatang';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_eight@1.0/SunBatang-Bold.woff') format('woff');
+    font-weight: 700;
+    font-display: swap;
+}
+
+:root {
+  --text-color: #555;
+  --bg-color: #fff;
+  --white: #fff;
+  --theme-color1-light: #dfdfdf;
+  --theme-color1-default: #b2c9d6;
+  --theme-color2-default: #a1cadb;
+  --theme-color3-default: #bddceb;
+  --theme-color4-default: #feee7d;
+  --theme-color5-default: #f2f2f2;
+}
+
+@theme inline {
+  --color-text: var(--text-color);
+  --color-bg: var(--bg-color);
+  --color-theme1-light: var(--theme-color1-light);
+  --color-theme1: var(--theme-color1-default);
+  --color-theme2: var(--theme-color2-default);
+  --color-theme3: var(--theme-color3-default);
+  --color-theme4: var(--theme-color4-default);
+  --color-theme5: var(--theme-color5-default);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  /* bumps every Tailwind text-* size proportionally (they're all rem-based) */
+  font-size: 18px;
+}
+
+body {
+  background: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Soonbatang';
+}
+
+/* highlighter-marker effect for bold/emphasized phrases */
+.highlight {
+  background-image: linear-gradient(
+    120deg,
+    var(--theme-color4-default) 0%,
+    var(--theme-color4-default) 100%
+  );
+  background-repeat: no-repeat;
+  background-size: 100% 42%;
+  background-position: 0 88%;
+  padding: 0 0.15em;
+}

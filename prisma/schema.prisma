@@ -1,0 +1,50 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // personal writing
+  title     String
+  content   String // markdown/plain text review or notes
+  published Boolean @default(false) // true = anyone with the link can view
+
+  // track info (from Spotify, or filled in manually)
+  trackName      String
+  artistName     String
+  albumName      String?
+  albumImageUrl  String?
+  spotifyUrl     String?
+  spotifyId      String?
+  spotifyAlbumId String? // lets us group posts by album and fetch the full tracklist
+  durationMs     Int?
+  releaseDate    String?
+
+  // lyrics (from Genius, editable / manual)
+  lyrics       String?
+  lyricsSource String? // "genius" | "manual"
+  geniusUrl    String?
+
+  tags Tag[]
+
+  @@index([createdAt])
+  @@index([published])
+  @@index([spotifyAlbumId])
+}
+
+model Tag {
+  id    String @id @default(cuid())
+  name  String @unique
+  posts Post[]
+}
