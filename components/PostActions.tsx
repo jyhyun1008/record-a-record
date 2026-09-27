@@ -25,7 +25,7 @@ export default function PostActions({ post }: { post: PostWithTags }) {
 
   return (
     <>
-      <div className="flex items-center gap-3 text-xs text-text/50">
+      <div className="flex items-center gap-3 text-xs text-text/75">
         <button onClick={() => setEditing(true)} className="hover:text-text">
           수정
         </button>

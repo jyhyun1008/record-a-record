@@ -87,7 +87,10 @@ export async function fetchLyrics(geniusUrl: string): Promise<string | null> {
     cache: "no-store",
   });
 
-  if (!res.ok) return null;
+  if (!res.ok) {
+    console.warn(`Genius lyrics page fetch failed: ${res.status} ${geniusUrl}`);
+    return null;
+  }
 
   const html = await res.text();
   const $ = cheerio.load(html);

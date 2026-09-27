@@ -17,7 +17,7 @@ export const postInputSchema = z.object({
   releaseDate: z.string().nullable().optional(),
 
   lyrics: z.string().nullable().optional(),
-  lyricsSource: z.enum(["genius", "manual"]).nullable().optional(),
+  lyricsSource: z.enum(["genius", "lrclib", "manual"]).nullable().optional(),
   geniusUrl: z.string().url().nullable().optional(),
 });
 

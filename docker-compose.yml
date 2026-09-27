@@ -8,6 +8,7 @@ services:
       - .env.production
     environment:
       DATABASE_URL: file:/data/prod.db
+      SKIP_GENIUS_LYRICS: "true"
     volumes:
       - record-a-record-data:/data
 

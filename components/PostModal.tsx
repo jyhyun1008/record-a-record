@@ -68,8 +68,8 @@ export default function PostModal({ onClose, onSaved, post, initialTrack }: Prop
   const [tagInput, setTagInput] = useState("");
 
   const [lyrics, setLyrics] = useState(post?.lyrics ?? "");
-  const [lyricsSource, setLyricsSource] = useState<"genius" | "manual" | null>(
-    (post?.lyricsSource as "genius" | "manual" | null) ?? null,
+  const [lyricsSource, setLyricsSource] = useState<"genius" | "lrclib" | "manual" | null>(
+    (post?.lyricsSource as "genius" | "lrclib" | "manual" | null) ?? null,
   );
   const [geniusUrl, setGeniusUrl] = useState<string | null>(post?.geniusUrl ?? null);
   const [lyricsLoading, setLyricsLoading] = useState(false);
@@ -122,28 +122,13 @@ export default function PostModal({ onClose, onSaved, post, initialTrack }: Prop
     setLyricsLoading(true);
     setLyricsOpen(true);
     try {
-      const searchRes = await fetch(
-        `/api/genius/search?artist=${encodeURIComponent(t.artistName)}&track=${encodeURIComponent(t.trackName)}`,
+      const res = await fetch(
+        `/api/lyrics?artist=${encodeURIComponent(t.artistName)}&track=${encodeURIComponent(t.trackName)}`,
       );
-      const searchData = await searchRes.json();
-      const match = searchData.matches?.[0];
-      if (!match) {
-        setLyrics("");
-        setLyricsSource(null);
-        setGeniusUrl(null);
-        return;
-      }
-      const lyricsRes = await fetch(`/api/genius/lyrics?url=${encodeURIComponent(match.geniusUrl)}`);
-      const lyricsData = await lyricsRes.json();
-      if (lyricsData.lyrics) {
-        setLyrics(lyricsData.lyrics);
-        setLyricsSource("genius");
-        setGeniusUrl(match.geniusUrl);
-      } else {
-        setLyrics("");
-        setLyricsSource(null);
-        setGeniusUrl(match.geniusUrl);
-      }
+      const data = await res.json();
+      setLyrics(data.lyrics ?? "");
+      setLyricsSource(data.source ?? null);
+      setGeniusUrl(data.geniusUrl ?? null);
     } catch {
       setLyrics("");
       setLyricsSource(null);
@@ -231,7 +216,7 @@ export default function PostModal({ onClose, onSaved, post, initialTrack }: Prop
           </h2>
           <button
             onClick={onClose}
-            className="rounded-full p-1 text-text/50 transition hover:bg-theme5 hover:text-text"
+            className="rounded-full p-1 text-text/75 transition hover:bg-theme5 hover:text-text"
             aria-label="닫기"
           >
             ✕
@@ -246,11 +231,11 @@ export default function PostModal({ onClose, onSaved, post, initialTrack }: Prop
                 value={query}
                 onChange={(e) => handleQueryChange(e.target.value)}
                 placeholder="곡 제목이나 아티스트를 검색하세요"
-                className="w-full rounded-xl border border-theme1-light bg-theme5 px-4 py-3 text-sm text-text placeholder:text-text/40 focus:border-theme2 focus:outline-none"
+                className="w-full rounded-xl border border-theme1-light bg-theme5 px-4 py-3 text-sm text-text placeholder:text-text/65 focus:border-theme2 focus:outline-none"
               />
               <div className="mt-3 space-y-1">
                 {searching && (
-                  <p className="px-1 text-xs text-text/50">검색 중...</p>
+                  <p className="px-1 text-xs text-text/75">검색 중...</p>
                 )}
                 {results.map((t) => (
                   <button
@@ -270,11 +255,11 @@ export default function PostModal({ onClose, onSaved, post, initialTrack }: Prop
                     )}
                     <div className="min-w-0">
                       <p className="truncate text-sm text-text">{t.trackName}</p>
-                      <p className="truncate text-xs text-text/50">
+                      <p className="truncate text-xs text-text/75">
                         {t.artistName} · {t.albumName}
                       </p>
                     </div>
-                    <span className="ml-auto shrink-0 text-xs text-text/40">
+                    <span className="ml-auto shrink-0 text-xs text-text/65">
                       {formatDuration(t.durationMs)}
                     </span>
                   </button>
@@ -298,17 +283,17 @@ export default function PostModal({ onClose, onSaved, post, initialTrack }: Prop
                   <p className="truncate text-sm font-medium text-text">
                     {track.trackName}
                   </p>
-                  <p className="truncate text-xs text-text/50">
+                  <p className="truncate text-xs text-text/75">
                     {track.artistName}
                     {track.albumName ? ` · ${track.albumName}` : ""}
                   </p>
                   {track.releaseDate && (
-                    <p className="mt-0.5 text-xs text-text/40">{track.releaseDate}</p>
+                    <p className="mt-0.5 text-xs text-text/65">{track.releaseDate}</p>
                   )}
                 </div>
                 <button
                   onClick={clearTrack}
-                  className="shrink-0 text-xs text-text/50 underline decoration-theme1 underline-offset-2 hover:text-text"
+                  className="shrink-0 text-xs text-text/75 underline decoration-theme1 underline-offset-2 hover:text-text"
                 >
                   다른 곡
                 </button>
@@ -318,7 +303,7 @@ export default function PostModal({ onClose, onSaved, post, initialTrack }: Prop
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="제목"
-                className="w-full border-b border-theme1-light bg-transparent px-1 py-2 text-lg font-medium text-text placeholder:text-text/40 focus:border-theme2 focus:outline-none"
+                className="w-full border-b border-theme1-light bg-transparent px-1 py-2 text-lg font-medium text-text placeholder:text-text/65 focus:border-theme2 focus:outline-none"
               />
 
               <textarea
@@ -327,19 +312,19 @@ export default function PostModal({ onClose, onSaved, post, initialTrack }: Prop
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="이 곡에 대해 적어보세요... (**이렇게** 감싸면 형광펜 강조가 돼요)"
                 rows={6}
-                className="w-full resize-none rounded-xl border border-theme1-light bg-theme5 px-4 py-3 text-sm leading-relaxed text-text placeholder:text-text/40 focus:border-theme2 focus:outline-none"
+                className="w-full resize-none rounded-xl border border-theme1-light bg-theme5 px-4 py-3 text-sm leading-relaxed text-text placeholder:text-text/65 focus:border-theme2 focus:outline-none"
               />
 
               <div className="flex flex-wrap items-center gap-1.5 rounded-xl border border-theme1-light bg-theme5 px-3 py-2">
                 {tags.map((tag) => (
                   <span
                     key={tag}
-                    className="flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-xs text-text/70"
+                    className="flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-xs text-text/90"
                   >
                     #{tag}
                     <button
                       onClick={() => removeTag(tag)}
-                      className="text-text/40 hover:text-text"
+                      className="text-text/65 hover:text-text"
                       aria-label={`${tag} 태그 삭제`}
                     >
                       ✕
@@ -352,14 +337,14 @@ export default function PostModal({ onClose, onSaved, post, initialTrack }: Prop
                   onKeyDown={handleTagKeyDown}
                   onBlur={commitTagInput}
                   placeholder={tags.length === 0 ? "태그 입력 후 Enter (예: 인디, 새벽감성)" : "태그 추가"}
-                  className="min-w-[8rem] flex-1 bg-transparent py-1 text-xs text-text placeholder:text-text/40 focus:outline-none"
+                  className="min-w-[8rem] flex-1 bg-transparent py-1 text-xs text-text placeholder:text-text/65 focus:outline-none"
                 />
               </div>
 
               <label className="flex items-center justify-between rounded-xl border border-theme1-light px-4 py-3 text-sm text-text">
                 <span>
                   다른 사람에게 공개
-                  <span className="ml-2 text-xs text-text/50">
+                  <span className="ml-2 text-xs text-text/75">
                     {published ? "누구나 링크로 볼 수 있어요" : "나만 볼 수 있어요"}
                   </span>
                 </span>
@@ -388,18 +373,20 @@ export default function PostModal({ onClose, onSaved, post, initialTrack }: Prop
                   <span>
                     가사
                     {lyricsLoading && (
-                      <span className="ml-2 text-xs text-text/50">불러오는 중...</span>
+                      <span className="ml-2 text-xs text-text/75">불러오는 중...</span>
                     )}
-                    {!lyricsLoading && lyricsSource === "genius" && (
-                      <span className="ml-2 text-xs text-green-700">Genius에서 자동으로 불러옴</span>
+                    {!lyricsLoading && (lyricsSource === "genius" || lyricsSource === "lrclib") && (
+                      <span className="ml-2 text-xs text-green-700">
+                        {lyricsSource === "genius" ? "Genius" : "LRCLIB"}에서 자동으로 불러옴
+                      </span>
                     )}
                     {!lyricsLoading && !lyrics && lyricsOpen && (
-                      <span className="ml-2 text-xs text-text/50">
+                      <span className="ml-2 text-xs text-text/75">
                         자동으로 찾지 못했어요, 직접 입력해주세요
                       </span>
                     )}
                   </span>
-                  <span className="text-text/40">{lyricsOpen ? "▲" : "▼"}</span>
+                  <span className="text-text/65">{lyricsOpen ? "▲" : "▼"}</span>
                 </button>
                 {lyricsOpen && (
                   <div className="border-t border-theme1-light p-3">
@@ -411,7 +398,7 @@ export default function PostModal({ onClose, onSaved, post, initialTrack }: Prop
                       }}
                       placeholder="가사를 직접 입력할 수 있어요"
                       rows={8}
-                      className="w-full resize-none rounded-lg border border-theme1-light bg-theme5 px-3 py-2 text-xs leading-relaxed whitespace-pre-wrap text-text/70 placeholder:text-text/40 focus:border-theme2 focus:outline-none"
+                      className="w-full resize-none rounded-lg border border-theme1-light bg-theme5 px-3 py-2 text-xs leading-relaxed whitespace-pre-wrap text-text/90 placeholder:text-text/65 focus:border-theme2 focus:outline-none"
                     />
                   </div>
                 )}
@@ -426,7 +413,7 @@ export default function PostModal({ onClose, onSaved, post, initialTrack }: Prop
           <div className="flex items-center justify-end gap-2 border-t border-theme1-light px-5 py-4">
             <button
               onClick={onClose}
-              className="rounded-full px-4 py-2 text-sm text-text/60 hover:text-text"
+              className="rounded-full px-4 py-2 text-sm text-text/85 hover:text-text"
             >
               취소
             </button>

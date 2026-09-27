@@ -9,7 +9,7 @@ Genius에서 가사를 자동으로 불러온다. 글쓰기는 모달 하나로 
 - **앨범 보기**: `/albums`에서 기록한 곡들을 앨범 단위로 모아봄. 앨범 상세(`/album/[spotifyAlbumId]`)는 Spotify에서 전체 트랙리스트를 불러와 몇 곡을 기록했는지 보여주고, 안 쓴 트랙은 바로 "기록하기"로 이어짐 (앨범 통으로 듣기를 돕는 용도)
 - **DB**: SQLite (`prisma/dev.db`), Prisma 7 + better-sqlite3 드라이버 어댑터
 - **곡 검색**: Spotify Web API (Client Credentials)
-- **가사**: Genius API로 검색 후 가사 페이지 파싱, 실패 시 직접 입력
+- **가사**: Genius API로 검색 후 가사 페이지 파싱. 서버 IP가 Genius에 막혀 실패하면 LRCLIB(키 필요 없는 무료 가사 API)으로 폴백, 그것도 없으면 직접 입력. docker-compose.yml에서는 `SKIP_GENIUS_LYRICS=true`로 Genius를 건너뛰고 LRCLIB만 사용
 
 ## 시작하기
 
@@ -46,12 +46,12 @@ http://localhost:3000 접속 → GitHub 로그인 → 오른쪽 아래 `+` 버�
 
 - `app/(app)/` — 피드, 글 상세 페이지. `layout.tsx`에 헤더 + (로그인 시에만) 글쓰기 버튼
 - `app/login/` — 로그인 페이지
-- `app/api/spotify`, `app/api/genius` — 외부 API 프록시 (로그인 필요, 글쓰기 모달 전용)
+- `app/api/spotify`, `app/api/lyrics` — 외부 API 프록시 (로그인 필요, 글쓰기 모달 전용)
 - `app/api/posts` — 글 CRUD (쓰기/수정/삭제는 로그인 필요)
 - `app/(app)/albums/`, `app/(app)/album/[id]/` — 앨범 목록 / 앨범별 트랙리스트 + 기록 현황
 - `components/PostModal.tsx` — 곡 검색 → 자동완성 → 태그/공개여부 → 글쓰기까지 하는 모달 (작성/수정 공용, `initialTrack`으로 특정 트랙을 미리 채워 열 수도 있음)
 - `components/LogTrackButton.tsx` — 앨범 트랙리스트에서 안 쓴 곡을 바로 기록하는 버튼
-- `lib/spotify.ts`, `lib/genius.ts` — 외부 API 클라이언트
+- `lib/spotify.ts`, `lib/genius.ts`, `lib/lrclib.ts` — 외부 API 클라이언트. `lib/lyrics.ts`가 Genius → LRCLIB 순으로 시도 (`/api/lyrics`)
 - `lib/tags.ts` — 태그 대소문자 중복 제거 + upsert 헬퍼
 - `lib/albums.ts` — 로컬 글들을 `spotifyAlbumId` 기준으로 앨범별로 묶는 헬퍼
 - `prisma/schema.prisma` — `Post`(곡 정보 + 가사 + 본인 글 + 공개여부 + 앨범 ID), `Tag` 모델

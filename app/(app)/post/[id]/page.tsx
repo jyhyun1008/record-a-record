@@ -18,7 +18,7 @@ export default async function PostPage({ params }: Params) {
 
   return (
     <article>
-      <Link href="/" className="text-xs text-text/50 hover:text-text">
+      <Link href="/" className="text-xs text-text/75 hover:text-text">
         ← 목록으로
       </Link>
 
@@ -34,14 +34,14 @@ export default async function PostPage({ params }: Params) {
           <div className="h-28 w-28 shrink-0 rounded-xl bg-theme5 sm:h-36 sm:w-36" />
         )}
         <div className="min-w-0 flex-1">
-          <p className="text-sm text-text/70">{post.artistName}</p>
+          <p className="text-sm text-text/90">{post.artistName}</p>
           <h1 className="mt-0.5 text-lg font-semibold text-text sm:text-xl">
             {post.trackName}
           </h1>
           {post.albumName && (
-            <p className="mt-0.5 text-xs text-text/50">{post.albumName}</p>
+            <p className="mt-0.5 text-xs text-text/75">{post.albumName}</p>
           )}
-          <p className="mt-1 text-xs text-text/40">
+          <p className="mt-1 text-xs text-text/65">
             {post.releaseDate}
             {post.releaseDate && post.durationMs ? " · " : ""}
             {formatDuration(post.durationMs)}
@@ -60,7 +60,7 @@ export default async function PostPage({ params }: Params) {
             {post.spotifyAlbumId && (
               <Link
                 href={`/album/${post.spotifyAlbumId}`}
-                className="text-xs text-text/50 underline decoration-theme1 underline-offset-2 hover:text-text"
+                className="text-xs text-text/75 underline decoration-theme1 underline-offset-2 hover:text-text"
               >
                 앨범 전체 보기
               </Link>
@@ -71,9 +71,9 @@ export default async function PostPage({ params }: Params) {
 
       <div className="mt-6 flex items-center justify-between border-y border-theme1-light py-3">
         <div className="flex items-center gap-3">
-          <p className="text-xs text-text/50">{formatDate(post.createdAt)}</p>
+          <p className="text-xs text-text/75">{formatDate(post.createdAt)}</p>
           {session && (
-            <span className="rounded-full bg-theme5 px-2 py-0.5 text-[10px] text-text/60">
+            <span className="rounded-full bg-theme5 px-2 py-0.5 text-[10px] text-text/85">
               {post.published ? "공개" : "비공개"}
             </span>
           )}
@@ -94,7 +94,7 @@ export default async function PostPage({ params }: Params) {
             <Link
               key={tag.id}
               href={`/?tag=${encodeURIComponent(tag.name)}`}
-              className="rounded-full border border-theme1-light px-2.5 py-1 text-xs text-text/60 hover:border-theme2 hover:text-text"
+              className="rounded-full border border-theme1-light px-2.5 py-1 text-xs text-text/85 hover:border-theme2 hover:text-text"
             >
               #{tag.name}
             </Link>
@@ -104,8 +104,8 @@ export default async function PostPage({ params }: Params) {
 
       {post.lyrics && (
         <details className="mt-8 rounded-xl border border-theme1-light p-4">
-          <summary className="cursor-pointer text-sm text-text/70">가사 보기</summary>
-          <p className="mt-3 whitespace-pre-wrap text-xs leading-relaxed text-text/60">
+          <summary className="cursor-pointer text-sm text-text/90">가사 보기</summary>
+          <p className="mt-3 whitespace-pre-wrap text-xs leading-relaxed text-text/85">
             {post.lyrics}
           </p>
           {post.geniusUrl && (
@@ -113,7 +113,7 @@ export default async function PostPage({ params }: Params) {
               href={post.geniusUrl}
               target="_blank"
               rel="noreferrer"
-              className="mt-3 inline-block text-xs text-text/40 hover:text-text/70"
+              className="mt-3 inline-block text-xs text-text/65 hover:text-text/90"
             >
               Genius에서 보기 ↗
             </a>

@@ -7,7 +7,7 @@ export default function LoginPage() {
         <h1 className="text-2xl font-semibold text-text">
           <span className="highlight">record a record</span>
         </h1>
-        <p className="mt-2 text-sm text-text/60">개인 음악 아카이브</p>
+        <p className="mt-2 text-sm text-text/85">개인 음악 아카이브</p>
         <form
           className="mt-8"
           action={async () => {

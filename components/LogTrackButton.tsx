@@ -12,7 +12,7 @@ export default function LogTrackButton({ track }: { track: TrackSelection }) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="shrink-0 rounded-full border border-theme1-light px-3 py-1 text-xs text-text/60 transition hover:border-theme2 hover:text-text"
+        className="shrink-0 rounded-full border border-theme1-light px-3 py-1 text-xs text-text/85 transition hover:border-theme2 hover:text-text"
       >
         + 기록하기
       </button>

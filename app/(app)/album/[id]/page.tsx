@@ -30,7 +30,7 @@ export default async function AlbumPage({ params }: Params) {
 
   return (
     <div>
-      <Link href="/albums" className="text-xs text-text/50 hover:text-text">
+      <Link href="/albums" className="text-xs text-text/75 hover:text-text">
         ← 앨범 목록으로
       </Link>
 
@@ -46,14 +46,14 @@ export default async function AlbumPage({ params }: Params) {
           <div className="h-28 w-28 shrink-0 rounded-xl bg-theme5 sm:h-36 sm:w-36" />
         )}
         <div className="min-w-0 flex-1">
-          <p className="text-sm text-text/70">{album.artistName}</p>
+          <p className="text-sm text-text/90">{album.artistName}</p>
           <h1 className="mt-0.5 text-lg font-semibold text-text sm:text-xl">
             <span className="highlight">{album.albumName}</span>
           </h1>
-          <p className="mt-1 text-xs text-text/40">
+          <p className="mt-1 text-xs text-text/65">
             {album.releaseDate} · {album.totalTracks}곡
           </p>
-          <p className="mt-1 text-xs text-text/50">
+          <p className="mt-1 text-xs text-text/75">
             {loggedCount} / {album.totalTracks}곡 기록함
           </p>
           <a
@@ -72,7 +72,7 @@ export default async function AlbumPage({ params }: Params) {
           const loggedPost = postByTrack.get(track.spotifyId);
           return (
             <div key={track.spotifyId} className="flex items-center gap-3 py-3">
-              <span className="w-5 shrink-0 text-right text-xs text-text/40">
+              <span className="w-5 shrink-0 text-right text-xs text-text/65">
                 {track.trackNumber}
               </span>
               {loggedPost ? (
@@ -83,15 +83,15 @@ export default async function AlbumPage({ params }: Params) {
                   {track.trackName}
                 </Link>
               ) : (
-                <span className="min-w-0 flex-1 truncate text-sm text-text/50">
+                <span className="min-w-0 flex-1 truncate text-sm text-text/75">
                   {track.trackName}
                 </span>
               )}
-              <span className="shrink-0 text-xs text-text/40">
+              <span className="shrink-0 text-xs text-text/65">
                 {formatDuration(track.durationMs)}
               </span>
               {loggedPost ? (
-                <span className="shrink-0 rounded-full bg-theme5 px-2 py-0.5 text-[10px] text-text/60">
+                <span className="shrink-0 rounded-full bg-theme5 px-2 py-0.5 text-[10px] text-text/85">
                   기록됨
                 </span>
               ) : session ? (
